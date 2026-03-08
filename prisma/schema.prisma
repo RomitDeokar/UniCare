@@ -1,0 +1,375 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Patient {
+  id                      Int              @id @default(autoincrement()) @map("Patient_ID")
+  firstName               String           @map("First_Name") @db.VarChar(50)
+  lastName                String           @map("Last_Name") @db.VarChar(50)
+  dateOfBirth             DateTime         @map("Date_of_Birth") @db.Date
+  gender                  Gender
+  bloodGroup              String           @map("Blood_Group") @db.VarChar(5)
+  contactNumber           String           @unique @map("Contact_Number") @db.VarChar(15)
+  email                   String?          @unique @db.VarChar(100)
+  street                  String?          @db.VarChar(100)
+  city                    String?          @db.VarChar(50)
+  state                   String?          @db.VarChar(50)
+  zipcode                 String?          @map("Zipcode") @db.VarChar(10)
+  emergencyContactName    String?          @map("Emergency_Contact_Name") @db.VarChar(100)
+  emergencyContactNumber  String?          @map("Emergency_Contact_Number") @db.VarChar(15)
+  registrationDate        DateTime         @default(now()) @map("Registration_Date") @db.Date
+  
+  appointments            Appointment[]
+  emergencyCases          EmergencyCase[]
+  medicalRecords          MedicalRecord[]
+  roomAllocations         RoomAllocation[]
+  bills                   Bill[]
+  recipient               Recipient?
+
+  @@map("PATIENT")
+}
+
+model Department {
+  id                Int        @id @default(autoincrement()) @map("Department_ID")
+  departmentName    String     @unique @map("Department_Name") @db.VarChar(100)
+  headDoctorId      Int?       @map("Head_Doctor_ID")
+  location          String?    @db.VarChar(100)
+  contactExtension  String?    @map("Contact_Extension") @db.VarChar(10)
+  
+  headDoctor        Doctor?    @relation("HeadDoctor", fields: [headDoctorId], references: [id], onDelete: SetNull)
+  doctors           Doctor[]   @relation("DepartmentDoctors")
+  rooms             Room[]
+
+  @@map("DEPARTMENT")
+}
+
+model Doctor {
+  id                Int              @id @default(autoincrement()) @map("Doctor_ID")
+  firstName         String           @map("First_Name") @db.VarChar(50)
+  lastName          String           @map("Last_Name") @db.VarChar(50)
+  specialization    String           @db.VarChar(100)
+  qualification     String           @db.VarChar(200)
+  experienceYears   Int              @map("Experience_Years")
+  contactNumber     String           @unique @map("Contact_Number") @db.VarChar(15)
+  email             String           @unique @db.VarChar(100)
+  licenseNumber     String           @unique @map("License_Number") @db.VarChar(50)
+  departmentId      Int?             @map("Department_ID")
+  consultationFee   Decimal          @map("Consultation_Fee") @db.Decimal(10, 2)
+  
+  department        Department?      @relation("DepartmentDoctors", fields: [departmentId], references: [id], onDelete: SetNull)
+  headOfDepartment  Department[]     @relation("HeadDoctor")
+  appointments      Appointment[]
+  emergencyCases    EmergencyCase[]
+  schedules         Schedule[]
+  medicalRecords    MedicalRecord[]
+
+  @@map("DOCTOR")
+}
+
+model Appointment {
+  id                Int                @id @default(autoincrement()) @map("Appointment_ID")
+  patientId         Int                @map("Patient_ID")
+  doctorId          Int                @map("Doctor_ID")
+  appointmentDate   DateTime           @map("Appointment_Date") @db.Date
+  appointmentTime   DateTime           @map("Appointment_Time") @db.Time
+  status            AppointmentStatus  @default(Scheduled)
+  reason            String?            @db.VarChar(200)
+  notes             String?            @db.Text
+  
+  patient           Patient            @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  doctor            Doctor             @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+
+  @@map("APPOINTMENT")
+}
+
+model EmergencyCase {
+  id                  Int               @id @default(autoincrement()) @map("Emergency_ID")
+  patientId           Int               @map("Patient_ID")
+  doctorId            Int               @map("Doctor_ID")
+  admissionDateTime   DateTime          @default(now()) @map("Admission_DateTime")
+  priorityLevel       PriorityLevel     @default(Medium) @map("Priority_Level")
+  chiefComplaint      String            @map("Chief_Complaint") @db.Text
+  vitalSigns          String?           @map("Vital_Signs") @db.Text
+  status              EmergencyStatus   @default(Active)
+  dischargeDateTime   DateTime?         @map("Discharge_DateTime")
+  
+  patient             Patient           @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  doctor              Doctor            @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+
+  @@map("EMERGENCY_CASE")
+}
+
+model Schedule {
+  id          Int            @id @default(autoincrement()) @map("Schedule_ID")
+  doctorId    Int            @map("Doctor_ID")
+  dayOfWeek   DayOfWeek      @map("Day_of_Week")
+  startTime   DateTime       @map("Start_Time") @db.Time
+  endTime     DateTime       @map("End_Time") @db.Time
+  shiftType   ShiftType      @map("Shift_Type")
+  status      ScheduleStatus @default(Available)
+  
+  doctor      Doctor         @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+
+  @@map("SCHEDULE")
+}
+
+model Donor {
+  id                 Int               @id @default(autoincrement()) @map("Donor_ID")
+  firstName          String            @map("First_Name") @db.VarChar(50)
+  lastName           String            @map("Last_Name") @db.VarChar(50)
+  dateOfBirth        DateTime          @map("Date_of_Birth") @db.Date
+  bloodGroup         String            @map("Blood_Group") @db.VarChar(5)
+  contactNumber      String            @unique @map("Contact_Number") @db.VarChar(15)
+  donorType          DonorType         @map("Donor_Type")
+  registrationDate   DateTime          @default(now()) @map("Registration_Date") @db.Date
+  medicalClearance   MedicalClearance  @default(Pending) @map("Medical_Clearance")
+  
+  organs             Organ[]
+
+  @@map("DONOR")
+}
+
+model Organ {
+  id              Int          @id @default(autoincrement()) @map("Organ_ID")
+  donorId         Int          @map("Donor_ID")
+  organType       OrganType    @map("Organ_Type")
+  bloodGroup      String       @map("Blood_Group") @db.VarChar(5)
+  tissueType      String?      @map("Tissue_Type") @db.VarChar(50)
+  donationDate    DateTime     @default(now()) @map("Donation_Date") @db.Date
+  expiryDateTime  DateTime     @map("Expiry_DateTime")
+  status          OrganStatus  @default(Available)
+  
+  donor           Donor        @relation(fields: [donorId], references: [id], onDelete: Cascade)
+  waitingList     WaitingList?
+
+  @@map("ORGAN")
+}
+
+model Recipient {
+  id                  Int           @id @default(autoincrement()) @map("Recipient_ID")
+  patientId           Int           @unique @map("Patient_ID")
+  requiredOrganType   OrganType     @map("Required_Organ_Type")
+  bloodGroup          String        @map("Blood_Group") @db.VarChar(5)
+  tissueType          String?       @map("Tissue_Type") @db.VarChar(50)
+  severityScore       Int           @map("Severity_Score")
+  registrationDate    DateTime      @default(now()) @map("Registration_Date") @db.Date
+  medicalStatus       String?       @map("Medical_Status") @db.Text
+  
+  patient             Patient       @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  waitingList         WaitingList?
+
+  @@map("RECIPIENT")
+}
+
+model WaitingList {
+  id              Int              @id @default(autoincrement()) @map("Waiting_List_ID")
+  recipientId     Int              @unique @map("Recipient_ID")
+  organId         Int?             @map("Organ_ID")
+  position        Int
+  priorityScore   Decimal          @map("Priority_Score") @db.Decimal(5, 2)
+  dateAdded       DateTime         @default(now()) @map("Date_Added") @db.Date
+  status          WaitingListStatus @default(Waiting)
+  
+  recipient       Recipient        @relation(fields: [recipientId], references: [id], onDelete: Cascade)
+  organ           Organ?           @relation(fields: [organId], references: [id], onDelete: SetNull)
+
+  @@map("WAITING_LIST")
+}
+
+model MedicalRecord {
+  id          Int       @id @default(autoincrement()) @map("Record_ID")
+  patientId   Int       @map("Patient_ID")
+  doctorId    Int       @map("Doctor_ID")
+  visitDate   DateTime  @default(now()) @map("Visit_Date") @db.Date
+  diagnosis   String?   @db.Text
+  symptoms    String?   @db.Text
+  prescription String?  @db.Text
+  labResults  String?   @map("Lab_Results") @db.Text
+  notes       String?   @db.Text
+  
+  patient     Patient   @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  doctor      Doctor    @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+
+  @@map("MEDICAL_RECORD")
+}
+
+model Room {
+  id              Int              @id @default(autoincrement()) @map("Room_ID")
+  departmentId    Int?             @map("Department_ID")
+  roomNumber      String           @unique @map("Room_Number") @db.VarChar(10)
+  roomType        RoomType         @map("Room_Type")
+  capacity        Int
+  status          RoomStatus       @default(Available)
+  floorNumber     Int              @map("Floor_Number")
+  
+  department      Department?      @relation(fields: [departmentId], references: [id], onDelete: SetNull)
+  allocations     RoomAllocation[]
+
+  @@map("ROOM")
+}
+
+model RoomAllocation {
+  id              Int                   @id @default(autoincrement()) @map("Allocation_ID")
+  patientId       Int                   @map("Patient_ID")
+  roomId          Int                   @map("Room_ID")
+  admissionDate   DateTime              @default(now()) @map("Admission_Date") @db.Date
+  dischargeDate   DateTime?             @map("Discharge_Date") @db.Date
+  status          RoomAllocationStatus  @default(Active)
+  
+  patient         Patient               @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  room            Room                  @relation(fields: [roomId], references: [id], onDelete: Cascade)
+
+  @@map("ROOM_ALLOCATION")
+}
+
+model Bill {
+  id              Int           @id @default(autoincrement()) @map("Bill_ID")
+  patientId       Int           @map("Patient_ID")
+  billDate        DateTime      @default(now()) @map("Bill_Date") @db.Date
+  totalAmount     Decimal       @map("Total_Amount") @db.Decimal(12, 2)
+  paidAmount      Decimal       @default(0) @map("Paid_Amount") @db.Decimal(12, 2)
+  paymentStatus   PaymentStatus @default(Pending) @map("Payment_Status")
+  paymentMethod   String?       @map("Payment_Method") @db.VarChar(50)
+  
+  patient         Patient       @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  @@map("BILL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      Role     @default(PATIENT)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("USER")
+}
+// Enums
+enum Gender {
+  Male
+  Female
+  Other
+}
+
+enum AppointmentStatus {
+  Scheduled
+  Completed
+  Cancelled
+  @map("No-Show")
+  NoShow
+}
+
+enum PriorityLevel {
+  Critical
+  High
+  Medium
+  Low
+}
+
+enum EmergencyStatus {
+  Active
+  Discharged
+  Transferred
+  Deceased
+}
+
+enum DayOfWeek {
+  Monday
+  Tuesday
+  Wednesday
+  Thursday
+  Friday
+  Saturday
+  Sunday
+}
+
+enum ShiftType {
+  Morning
+  Evening
+  Night
+}
+
+enum ScheduleStatus {
+  Available
+  @map("On-Leave")
+  OnLeave
+  Busy
+}
+
+enum DonorType {
+  Living
+  Deceased
+}
+
+enum MedicalClearance {
+  Approved
+  Pending
+  Rejected
+}
+
+enum OrganType {
+  Heart
+  Kidney
+  Liver
+  Lung
+  Pancreas
+  Cornea
+  @map("Small Intestine")
+  SmallIntestine
+}
+
+enum OrganStatus {
+  Available
+  Allocated
+  Transplanted
+  Expired
+}
+
+enum WaitingListStatus {
+  Waiting
+  Matched
+  Transplanted
+  Removed
+}
+
+enum RoomType {
+  General
+  Private
+  ICU
+  Emergency
+}
+
+enum RoomStatus {
+  Available
+  Occupied
+  Maintenance
+}
+
+enum RoomAllocationStatus {
+  Active
+  Discharged
+}
+
+enum PaymentStatus {
+  Pending
+  Partial
+  Paid
+}
+
+
+enum Role {
+  ADMIN
+  DOCTOR
+  PATIENT
+}

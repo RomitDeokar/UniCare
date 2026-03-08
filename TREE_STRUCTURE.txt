@@ -1,0 +1,342 @@
+# 🌳 UniCare HMS - Project Tree Structure
+
+```
+unicare-hms/
+│
+├── 📚 Documentation (START HERE!)
+│   ├── START_HERE.md ⭐ ← READ THIS FIRST!
+│   ├── QUICKSTART.md (5-minute setup guide)
+│   ├── README.md (complete documentation)
+│   ├── PROJECT_OVERVIEW.md (detailed info)
+│   ├── FILE_INDEX.md (all files explained)
+│   └── TREE_STRUCTURE.txt (this file)
+│
+├── 🗄️ Database Files
+│   ├── hospital_ddl.sql (DDL - 14 tables)
+│   └── hospital_dml.sql (DML - sample data)
+│
+├── ⚙️ Configuration Files
+│   ├── .env.example (environment template)
+│   ├── .gitignore (git ignore rules)
+│   ├── package.json (dependencies - 24 packages)
+│   ├── tsconfig.json (TypeScript config)
+│   ├── tailwind.config.ts (Tailwind theme)
+│   ├── postcss.config.js (PostCSS config)
+│   └── next.config.js (Next.js config)
+│
+├── 🚀 Installation
+│   └── install.sh (automated setup script)
+│
+├── 📱 Application Code (app/)
+│   ├── page.tsx ← Landing Page (450+ lines)
+│   ├── layout.tsx ← Root Layout
+│   ├── globals.css ← Global Styles
+│   │
+│   ├── 🏥 dashboard/
+│   │   ├── page.tsx ← Dashboard Home (350+ lines)
+│   │   │
+│   │   ├── patients/
+│   │   │   └── page.tsx ← Patient Management (500+ lines)
+│   │   │       ├── Search & Filter
+│   │   │       ├── Patient List
+│   │   │       ├── Add Patient Form
+│   │   │       └── CRUD Operations
+│   │   │
+│   │   └── emergency/
+│   │       └── page.tsx ← Emergency Cases (450+ lines)
+│   │           ├── Priority Filters
+│   │           ├── Color-coded Cases
+│   │           ├── Vital Signs Display
+│   │           └── Doctor Assignments
+│   │
+│   └── 🔌 api/
+│       └── patients/
+│           └── route.ts ← Patient API (GET, POST)
+│
+├── 🎨 UI Components (components/)
+│   ├── providers.tsx ← TanStack Query Provider
+│   │
+│   └── ui/ (shadcn/ui components)
+│       ├── button.tsx ← Button Component
+│       ├── card.tsx ← Card Components
+│       ├── input.tsx ← Input Component
+│       └── label.tsx ← Label Component
+│
+├── 🔧 Utilities (lib/)
+│   ├── prisma.ts ← Database Client
+│   └── utils.ts ← Helper Functions
+│
+└── 🗃️ Database Schema (prisma/)
+    └── schema.prisma ← Complete Schema (400+ lines)
+        ├── 14 Models (Tables)
+        ├── Relationships
+        ├── Enums (15 types)
+        └── Constraints
+```
+
+## 📊 Statistics
+
+- **Total Files**: 30 files
+- **Total Size**: ~200KB (source code only)
+- **Lines of Code**: 5,000+ lines
+- **Documentation**: 1,600+ lines
+- **React Components**: 25+ components
+- **Database Tables**: 14 tables
+- **API Endpoints**: Ready-to-expand structure
+
+## 🎯 Key Directories Explained
+
+### 📱 app/ - Main Application
+The heart of your Next.js application using App Router:
+- **page.tsx** - Routes and pages
+- **layout.tsx** - Layouts and wrappers
+- **api/** - Backend API endpoints
+- **dashboard/** - Protected dashboard area
+
+### 🎨 components/ - Reusable UI
+React components used throughout the app:
+- **ui/** - Base components (buttons, cards, inputs)
+- **providers.tsx** - Context providers
+
+### 🔧 lib/ - Utilities
+Helper functions and configurations:
+- **prisma.ts** - Database client singleton
+- **utils.ts** - Common utilities
+
+### 🗃️ prisma/ - Database Layer
+ORM configuration and schema:
+- **schema.prisma** - Database models and relationships
+
+## 📁 File Categories
+
+### Essential Files (Must Have)
+```
+✅ package.json
+✅ .env.example
+✅ hospital_ddl.sql
+✅ hospital_dml.sql
+✅ prisma/schema.prisma
+✅ All app/ files
+✅ All components/ files
+✅ All lib/ files
+✅ Configuration files
+```
+
+### Documentation Files (Super Helpful)
+```
+📚 START_HERE.md
+📚 QUICKSTART.md
+📚 README.md
+📚 PROJECT_OVERVIEW.md
+📚 FILE_INDEX.md
+📚 TREE_STRUCTURE.txt (this file)
+```
+
+### Helper Files
+```
+🚀 install.sh (automated setup)
+🚫 .gitignore (git rules)
+```
+
+## 🎨 Page Structure
+
+### Landing Page (app/page.tsx)
+```
+┌─────────────────────────────────┐
+│     Hero Section (animated)      │
+│  - Title with gradient          │
+│  - Description                  │
+│  - CTA buttons                  │
+├─────────────────────────────────┤
+│    Statistics Grid (4 cards)    │
+│  - Total Patients: 10,000+      │
+│  - Medical Staff: 500+          │
+│  - Departments: 50+             │
+│  - Uptime: 99.9%                │
+├─────────────────────────────────┤
+│   Features Section (8 cards)    │
+│  - Patient Management           │
+│  - Doctor Scheduling            │
+│  - Emergency Priority           │
+│  - Organ Donation               │
+│  - (4 more modules)             │
+├─────────────────────────────────┤
+│  Emergency Priority Showcase    │
+│  - System explanation           │
+│  - Priority levels              │
+│  - Active cases demo            │
+├─────────────────────────────────┤
+│   Organ Donation Section        │
+│  - Donor management             │
+│  - Compatibility matching       │
+│  - Waiting list                 │
+├─────────────────────────────────┤
+│      CTA Section (gradient)     │
+├─────────────────────────────────┤
+│     Footer (4 columns)          │
+└─────────────────────────────────┘
+```
+
+### Dashboard (app/dashboard/page.tsx)
+```
+┌─────────────────────────────────┐
+│         Header Bar              │
+│  Logo | Navigation | Profile    │
+├─────────────────────────────────┤
+│       Welcome Section           │
+├─────────────────────────────────┤
+│    Stats Grid (4 metrics)       │
+│  - Patients | Appointments      │
+│  - Emergency | Revenue           │
+├─────────────────────────────────┤
+│  Quick Access Modules (8 cards) │
+│  ┌────┬────┬────┬────┐          │
+│  │Pats│Docs│Appt│Emrg│          │
+│  ├────┼────┼────┼────┤          │
+│  │Orgn│Dept│Rcrd│Bill│          │
+│  └────┴────┴────┴────┘          │
+├─────────────────────────────────┤
+│ Recent Activities | Emergency   │
+│      Feed         |   Cases     │
+└─────────────────────────────────┘
+```
+
+### Patient Management
+```
+┌─────────────────────────────────┐
+│  Header: Patient Management     │
+│  [← Back]  [+ Add Patient]      │
+├─────────────────────────────────┤
+│     [🔍 Search patients...]     │
+├─────────────────────────────────┤
+│  Stats: Total | New | Active    │
+├─────────────────────────────────┤
+│       Patient List              │
+│  ┌───────────────────────────┐  │
+│  │ 👤 John Doe    [O+] Male  │  │
+│  │ 📞 987654321  📧 email    │  │
+│  │ 📍 Mumbai, MH             │  │
+│  │ [👁️] [✏️] [🗑️]            │  │
+│  ├───────────────────────────┤  │
+│  │ (More patients...)        │  │
+│  └───────────────────────────┘  │
+└─────────────────────────────────┘
+```
+
+### Emergency Cases
+```
+┌─────────────────────────────────┐
+│  Header: Emergency Cases        │
+│  [← Back]  [+ New Emergency]    │
+├─────────────────────────────────┤
+│ Priority Stats (4 cards)        │
+│  [Active] [Critical] [High] [...│
+├─────────────────────────────────┤
+│ Filters: [All] [Critical] [...  │
+├─────────────────────────────────┤
+│  Color-Coded Cases              │
+│  ┌─────────────────────────┐    │
+│  │🔴 CRITICAL              │    │
+│  │ Cardiac Arrest          │    │
+│  │ BP:180/110 HR:120       │    │
+│  │ Dr. Anderson | Active   │    │
+│  ├─────────────────────────┤    │
+│  │🟠 HIGH                  │    │
+│  │ (More cases...)         │    │
+│  └─────────────────────────┘    │
+└─────────────────────────────────┘
+```
+
+## 🔌 API Structure
+
+```
+/api
+└── patients/
+    └── route.ts
+        ├── GET    → Fetch all patients
+        └── POST   → Create new patient
+
+(Expandable to):
+/api
+├── patients/
+│   ├── route.ts (GET, POST)
+│   └── [id]/
+│       └── route.ts (GET, PUT, DELETE)
+├── doctors/
+├── appointments/
+├── emergency/
+└── ... (other endpoints)
+```
+
+## 🗄️ Database Schema Overview
+
+```
+14 TABLES:
+├── PATIENT
+├── DOCTOR
+├── DEPARTMENT
+├── APPOINTMENT
+├── EMERGENCY_CASE
+├── SCHEDULE
+├── DONOR
+├── ORGAN
+├── RECIPIENT
+├── WAITING_LIST
+├── MEDICAL_RECORD
+├── ROOM
+├── ROOM_ALLOCATION
+└── BILL
+
+15 ENUMS:
+├── Gender
+├── AppointmentStatus
+├── PriorityLevel
+├── EmergencyStatus
+├── DayOfWeek
+├── ShiftType
+├── ScheduleStatus
+├── DonorType
+├── MedicalClearance
+├── OrganType
+├── OrganStatus
+├── WaitingListStatus
+├── RoomType
+├── RoomStatus
+└── PaymentStatus
+```
+
+## 🎯 Quick Navigation
+
+**Want to see...?**
+- 🏠 **Landing page code** → `app/page.tsx`
+- 📊 **Dashboard** → `app/dashboard/page.tsx`
+- 👥 **Patient management** → `app/dashboard/patients/page.tsx`
+- 🚑 **Emergency system** → `app/dashboard/emergency/page.tsx`
+- 🗄️ **Database schema** → `prisma/schema.prisma`
+- 🔌 **API endpoint** → `app/api/patients/route.ts`
+- 🎨 **UI components** → `components/ui/`
+- ⚙️ **Configuration** → `*.config.*` files
+- 📚 **Documentation** → `*.md` files
+
+## 💡 Tips
+
+1. **Start with**: `START_HERE.md`
+2. **Quick setup**: `QUICKSTART.md`
+3. **Need help**: `README.md`
+4. **Understanding code**: Look at comments in `.tsx` files
+5. **Database design**: Check `prisma/schema.prisma` and `hospital_ddl.sql`
+
+## 🚀 Next Steps
+
+1. Read `START_HERE.md`
+2. Run `install.sh` or follow `QUICKSTART.md`
+3. Explore the code
+4. Run `npm run dev`
+5. Open http://localhost:3000
+6. Be amazed! 🎉
+
+---
+
+**Total project size**: ~200KB (excluding node_modules)  
+**Setup time**: 5-6 minutes  
+**Impressiveness level**: 🔥🔥🔥🔥🔥

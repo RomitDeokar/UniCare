@@ -1,0 +1,56 @@
+# dependencies
+node_modules/
+
+# next.js build output
+.next/
+out/
+
+# production build
+build/
+
+# environment variables (VERY IMPORTANT)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# prisma generated files (optional if generated locally)
+prisma/generated/
+
+# database files (if local sqlite used)
+*.db
+*.sqlite
+
+# system files
+.DS_Store
+Thumbs.db
+
+# editor settings
+.vscode/
+.idea/
+
+# TypeScript build cache
+*.tsbuildinfo
+
+# coverage
+coverage/
+
+# temporary files
+*.tmp
+*.temp
+
+# qodo (your local tool folder)
+.qodo/
+
+# package lock? (keep this tracked usually)
+# package-lock.json  <-- DO NOT ignore unless team decides otherwise
+*.sql
+!hospital_ddl.sql
+!hospital_dml.sql
